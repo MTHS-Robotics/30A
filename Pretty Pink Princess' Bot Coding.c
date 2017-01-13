@@ -1,3 +1,5 @@
+// Drive kills the robot, fix it later. Figure out how the hell autonomous works so you can stop cursing yourself off. For now, go f*** yourself.
+
 #pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, dgtl2,  solenoid1,      sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  rightIEM,       sensorQuadEncoderOnI2CPort,    , AutoAssign)
@@ -113,19 +115,15 @@ nMotorEncoder[RightMotor] = 0;
 nMotorEncoder[LeftMotor] = 0;
 
 //While less than 1000 encoder counts of the right motor
-while(nMotorEncoder[RightMotor] < 10)
+while(nMotorEncoder[RightMotor] < 1000)
 {
 //Move forward at half power
 motor[RightMotor] = 127;
 motor[LeftMotor] = 49;
 }
 
-  //Clear the encoders associated with the left and right motors
-nMotorEncoder[RightMotor] = 0;
-nMotorEncoder[LeftMotor] = 0;
-
 //While less than 1000 encoder counts of the right motor
-while(nMotorEncoder[RightMotor] > -10)
+while(nMotorEncoder[RightMotor] > -1000)
 {
 //Move in reverse at half power
 motor[RightMotor] = -127;
