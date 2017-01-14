@@ -2,10 +2,11 @@
 #pragma config(Sensor, dgtl1,  rightEncoder,   sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  leftEncoder,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl5,  solenoid1,      sensorDigitalOut)
+#pragma config(Sensor, dgtl6,  solenoid2,      sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  rightIEM,       sensorQuadEncoderOnI2CPort,    , AutoAssign)
 #pragma config(Sensor, I2C_2,  leftIEM,        sensorQuadEncoderOnI2CPort,    , AutoAssign)
-#pragma config(Motor,  port2,           RightMotor,    tmotorVex393, openLoop, encoder, encoderPort, I2C_1, 1000)
-#pragma config(Motor,  port3,           LeftMotor,     tmotorVex393, openLoop, reversed, encoder, encoderPort, I2C_2, 1000)
+#pragma config(Motor,  port2,           RightMotor,    tmotorVex393, openLoop, reversed, encoder, encoderPort, I2C_1, 1000)
+#pragma config(Motor,  port3,           LeftMotor,     tmotorVex393, openLoop, encoder, encoderPort, I2C_2, 1000)
 #pragma config(Motor,  port4,           MiddleMotor,   tmotorVex393, openLoop)
 #pragma config(Motor,  port5,           TowerLeft,     tmotorVex393, openLoop)
 #pragma config(Motor,  port6,           TowerRight,    tmotorVex393, openLoop)
@@ -38,7 +39,7 @@ void pre_auton()
 {
   // Set bStopTasksBetweenModes to false if you want to keep user created tasks running between
   // Autonomous and Tele-Op modes. You will need to manage all user created tasks if set to false.
-  bStopTasksBetweenModes = true;
+  bStopTasksBetweenModes = false;
 
 	// All activities that occur before the competition starts
 	// Example: clearing encoders, setting servo positions, ...
@@ -55,34 +56,22 @@ void pre_auton()
 
 task autonomous()
 {
-	wait1Msec(2000);
+	wait1Msec(1000);
 
 	//Clear the encoders associated with the left and right motors
 	nMotorEncoder[RightMotor] = 0;
 	nMotorEncoder[LeftMotor] = 0;
 
-	//While less than 1000 encoder counts of the right motor
-	while(nMotorEncoder[RightMotor] < 1000)
-	{
-		//Move forward at half power
-		motor[RightMotor] = 120;
-		motor[LeftMotor]	= 120;
-		break;
-	}
-
-  //Clear the encoders associated with the left and right motors
-	nMotorEncoder[RightMotor] = 0;
-	nMotorEncoder[LeftMotor] = 0;
-
-	//While less than 1000 encoder counts of the right motor
-	while(nMotorEncoder[RightMotor] > -1000)
-	{
-		//Move in reverse at half power
-		motor[RightMotor] = -63;
-		motor[LeftMotor]	= -63;
-		break;
-	}
+	//Move forward at half power
+	motor[RightMotor] = 127;
+	motor[LeftMotor]	= 40;
+	Sleep(5000);
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
 	
+	StartTask(usercontrol);
+	StopTask(autonomous);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -97,16 +86,16 @@ task autonomous()
 //============================================| TASK WHEELS |============================================
 task Wheels()
 {
-if(motor[RightMotor] = -63;)
+
 StopTask(autonomous);
- 
+
   while(1 == 1)
   {
   	motor[MiddleMotor] = vexRT[Ch1];
     motor[RightMotor] = vexRT[Ch2];
     motor[LeftMotor]  = vexRT[Ch3];
     motor[MiddleMotor] = vexRT[Ch4];
- 
+
     }
 }
 
@@ -202,7 +191,7 @@ task Drive()
 		else	// Only runs if leftEncoder has counted more encoder counts
 		{
 			// Turn slightly left
-			motor[LeftMotor] = 70%motor[RightMotor];	
+			motor[LeftMotor] = 70%motor[RightMotor];
 		}
 	}
 }
@@ -216,10 +205,12 @@ task Pneumatics()
     if(vexRT[Btn8D] == 1)
     {
       SensorValue[solenoid1] = 1;
+      SensorValue[solenoid2] = 1;
     }
     else
     {
       SensorValue[solenoid1] = 0;
+      SensorValue[solenoid2] = 0;
     }
   }
 }
