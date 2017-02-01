@@ -1,6 +1,3 @@
-#pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, dgtl1,  rightEncoder,   sensorQuadEncoder)
-#pragma config(Sensor, dgtl3,  leftEncoder,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl5,  solenoid1,      sensorDigitalOut)
 #pragma config(Sensor, dgtl6,  solenoid2,      sensorDigitalOut)
 #pragma config(Sensor, I2C_1,  rightIEM,       sensorQuadEncoderOnI2CPort,    , AutoAssign)
