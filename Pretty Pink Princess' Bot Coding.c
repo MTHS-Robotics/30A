@@ -105,7 +105,7 @@ task Pneumatics()
 {
   while(true)
   {
-    if(vexRT[Btn6U] == 1)
+    if(vexRT[Bt7U] == 1)
     {
       SensorValue[solenoid1] = 1;
       SensorValue[solenoid2] = 1;
